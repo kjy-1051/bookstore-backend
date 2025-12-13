@@ -40,18 +40,56 @@ https://documenter.getpostman.com/view/48959912/2sB3dSRpFS
 
 ### 로컬 실행
 
+- 가상환경 생성 및 활성화 (선택)
+python -m venv venv
+source venv/bin/activate
+
+- 의존성 설치
 pip install -r requirements.txt
 
+- DB 마이그레이션
 alembic upgrade head
 
+- 시드 데이터 생성
 python app/seed.py
 
+- 서버 실행
 uvicorn app.main:app --host 0.0.0.0 --port 8080
+
+Swagger UI: http://localhost:8080/docs
+Health Check: http://localhost:8080/health
 
 ### 서버 실행 
 
-pm2 start "uvicorn app.main:app --host 0.0.0.0 --port 8080" --name bookstore
+- pm2 설치 (FastAPI 서버를 백그라운드로 실행하기 위한 프로세스 매니저)
+sudo apt update
+sudo apt install -y nodejs npm
+sudo npm install -g pm2
 
+- 프로젝트 다운로드
+git clone https://github.com/kjy-1051/bookstore-backend.git
+cd bookstore-backend
+
+- 가상환경 활성화
+source venv/bin/activate
+
+- 의존성 설치
+pip install -r requirements.txt
+
+- DB 마이그레이션 및 시드 데이터
+alembic upgrade head
+python app/seed.py
+
+- (선택) 기존 pm2 프로세스 제거
+pm2 delete bookstore || true
+
+- FastAPI 서버 실행 (pm2)
+pm2 start ./venv/bin/uvicorn \
+  --name bookstore \
+  --interpreter python3 \
+  -- app.main:app --host 0.0.0.0 --port 8080
+
+- pm2 설정 저장
 pm2 save
 
 ## 환경변수 설명 (.env.example)
