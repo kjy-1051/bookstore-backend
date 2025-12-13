@@ -1,6 +1,5 @@
-# Bookstore API (FastAPI)
 
-## 📚 Bookstore API (FastAPI)
+# 📚 Bookstore API (FastAPI)
 
 FastAPI 기반 백엔드 애플리케이션입니다.
 JWT 기반 인증/인가(RBAC)를 사용하며, 도서·댓글·평점 관리 및 관리자 전용 API를 제공합니다.
@@ -47,7 +46,7 @@ python app/seed.py
 
 uvicorn app.main:app --host 0.0.0.0 --port 8080
 
-###서버 실행 
+### 서버 실행 
 
 pm2 start "uvicorn app.main:app --host 0.0.0.0 --port 8080" --name bookstore
 
@@ -85,11 +84,12 @@ REDIS_PORT = Redis host
 
 ## 역할 / 권한
 
-API 경로    USER ADMIN
-/books	    O  	O
-/comments	  O	  O
-/ratings	  O	  O
-/admin/*	  X	  O
+| API 경로        | USER | ADMIN |
+|-----------------|:----:|:-----:|
+| `/books`        |  O   |   O   |
+| `/comments`     |  O   |   O   |
+| `/ratings`      |  O   |   O   |
+| `/admin/*`      |  X   |   O   |
 
 ## 예제 계정
 
