@@ -89,8 +89,7 @@ API 경로    USER ADMIN
 /books	    O  	O
 /comments	  O	  O
 /ratings	  O	  O
-
-/admin/*	X	O
+/admin/*	  X	  O
 
 ## 예제 계정
 
