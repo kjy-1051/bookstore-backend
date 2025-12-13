@@ -8,7 +8,7 @@ from fastapi import Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from contextlib import asynccontextmanager
-from app.core.database import get_engine, Base
+from app.core.database import engine, Base
 
 from app.routers.user_router import router as user_router
 from app.routers.auth_router import router as auth_router
@@ -23,15 +23,13 @@ from app.models.rating import Rating   # 추가하지 않으면 테이블 생성
 from fastapi.middleware.cors import CORSMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
 
-from contextlib import asynccontextmanager
-from app.core.database import get_engine, Base
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    engine = get_engine()
     Base.metadata.create_all(bind=engine)
     print("✅ DB tables ensured")
     yield
+
 
 
 app = FastAPI(
