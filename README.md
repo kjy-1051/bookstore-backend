@@ -76,9 +76,9 @@ REDIS_PORT = Redis host
 ## 인증 플로우 설명
 
 - /auth/login으로 로그인
-- 
+
 - ACCESS TOKEN (JWT) 발급
-- 
+
 - 이후 API 요청 시: Authorization: Bearer <AccessToken>
 
 - Role 기반 인가(RBAC): ROLE_USER / ROLE_ADMIN
@@ -86,12 +86,9 @@ REDIS_PORT = Redis host
 ## 역할 / 권한
 
 API 경로    USER ADMIN
-
 /books	    O  	O
-
-/comments	O	O
-
-/ratings	O	O
+/comments	  O	  O
+/ratings	  O	  O
 
 /admin/*	X	O
 
