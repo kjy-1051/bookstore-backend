@@ -97,19 +97,11 @@ REDIS_PORT = Redis host
 
 - USER: user1@test.com / 1234
 
-## DB 연결 정보
+## Database Configuration
 
-DB_HOST=127.0.0.1
-
-DB_PORT=3306
-
-DB_NAME=bookstore
-
-DB_USER=bookstore
-
-DB_PASSWORD=****
-
-권한: bookstore DB에 한정된 ALL PRIVILEGES
+- Database credentials are managed via `.env`
+- Actual values are **excluded** from this public repository
+- Access is restricted to an application-specific database
 
 ## 주요 엔드포인트
 
