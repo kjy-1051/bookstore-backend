@@ -2,11 +2,14 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 import time
+from datetime import datetime, timezone
 
 from fastapi import Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.database import Base, engine
+from contextlib import asynccontextmanager
+from app.core.database import get_engine, Base
+
 from app.routers.user_router import router as user_router
 from app.routers.auth_router import router as auth_router
 from app.routers.book_router import router as book_router
@@ -20,11 +23,23 @@ from app.models.rating import Rating   # 추가하지 않으면 테이블 생성
 from fastapi.middleware.cors import CORSMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
 
+from contextlib import asynccontextmanager
+from app.core.database import get_engine, Base
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    engine = get_engine()
+    Base.metadata.create_all(bind=engine)
+    print("✅ DB tables ensured")
+    yield
+
+
 app = FastAPI(
     title="Bookstore API",
     description="A simple FastAPI Bookstore service",
     version="1.0.0",
-    swagger_ui_parameters={"persistAuthorization": True}
+    swagger_ui_parameters={"persistAuthorization": True},
+    lifespan=lifespan
 )
 
 app.add_middleware(RateLimitMiddleware)
@@ -69,6 +84,17 @@ async def log_requests(request: Request, call_next):
     )
     return response
 
+BUILD_TIME = datetime.now(timezone.utc)
+
+@app.get("/health", tags=["Health"])
+def health():
+    return {
+        "status": "ok",
+        "version": "1.0.0",
+        "build_time": BUILD_TIME.isoformat(),
+        "server_time": datetime.now(timezone.utc).isoformat()
+    }
+
 def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
@@ -103,17 +129,6 @@ app.include_router(rating_router, prefix="/ratings")
 app.include_router(admin_user_router)
 app.include_router(admin_dashboard_router)
 
-
-# DB 생성
-Base.metadata.create_all(bind=engine)
-
-@app.get("/health", tags=["Health"])
-def health():
-    return {
-        "status": "ok",
-        "version": "1.0.0",
-        "build_time": "2025-02-01T12:00:00Z"
-    }
 
 from app.exceptions.handler import (
     custom_exception_handler,
