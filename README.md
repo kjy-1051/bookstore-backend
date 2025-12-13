@@ -33,6 +33,8 @@ http://113.198.66.68:10089/docs
 Health Check
 http://113.198.66.68:10089/health
 
+postman URL
+https://documenter.getpostman.com/view/48959912/2sB3dSRpFS
 
 ## 실행 방법
 
